@@ -1,0 +1,42 @@
+{% extends "basic.html" %}
+{% block title %}Job #{{ job.id }}{% endblock %}
+{% block title2 %}Job #{{ job.id }}{% endblock %}
+{% block jumbocontainer %}
+{{ super() }}
+<h4 class="h4">"{{ job.title }}"</h3>
+{% endblock %}
+{% block maincontainer %}
+<div class="card">
+    <div class="card-body">
+        <p>URL: <samp>{{ job.url }}</samp></p>
+        <p>Running? <samp>{{ job.alive() }}</samp></p>
+        <p>Saving to <samp>{{ job.output_path }}</samp></p>
+        <p>Resolution: <samp>{{ job.format.resolution }}</samp></p>
+        <p>Codec: <samp>{{ job.format.vcodec }}/{{ job.format.acodec }}</samp></p>
+        <p>{{ job.nice_uptime2(use_tag=True)|safe }}</p>
+    </div>
+    <div class="card-body">
+        {% if job.alive() %}
+            <a class="btn btn-danger" href="{{ url_for('restart', job_id=job.id) }}">
+                Stop
+            </a>
+        {% else %}
+            <a class="btn btn-warning" href="{{ url_for('restart', job_id=job.id) }}">
+                Restart
+            </a>
+        {% endif %}
+        <a class="btn btn-primary" data-toggle="collapse" href="#logs" role="button">
+            Toggle logs
+        </a>
+        <div class="collapse" id="logs">
+            <div class="card card-body">
+                <pre>
+                    <code>
+                        {{ job.get_log() }}
+                    </code>
+                </pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

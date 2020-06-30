@@ -1,0 +1,46 @@
+{% extends "create.html" %}
+{% block maincontainer %}
+<div class="accordion" id="accordion">
+{% for video in options %}
+<div class="card">
+    <div class="card-header" id="heading{{ loop.index }}">
+        <h2 class="mb-0">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse{{ loop.index }}">
+                "{{ video.title }}"
+            </button>
+        </h2>
+    </div>
+
+    <div id="collapse{{ loop.index }}" class="collapse" data-parent="#accordion">
+        <div class="card-body">
+            <table class="table table-striped">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Format</th>
+                    <th scope="col">Submit</th>
+                </tr>
+                <tbody>
+                    {% for format in video.formats %}
+                        <form action="" method="POST">
+                            <tr>
+                                <th scope="row">{{ format.format_id }}</th>
+                                <td>{{ format.resolution }} {{ format.format_note }} in {{ format.vcodec }}/{{ format.acodec}}</td>
+                                <input type="hidden" name="stage" value="create">
+                                <input type="hidden" name="url" value="{{ url }}">
+                                <input type="hidden" name="video_id" value="{{ video.id }}">
+                                <input type="hidden" name="option_id" value="{{ format.format_id }}">
+                                <input type="hidden" name="output_filename" value="{{ video.title }}">
+                                <td>
+                                    <button type="submit" class="btn btn-primary float-right">Go</button>
+                                </td>
+                            </tr>
+                        </form>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endblock %}

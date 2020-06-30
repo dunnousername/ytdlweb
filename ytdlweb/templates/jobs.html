@@ -1,0 +1,25 @@
+{% extends "basic.html" %}
+{% block title %}Jobs{% endblock %}
+{% block title2 %}Jobs{% endblock %}
+{% block maincontainer %}
+{% for job in jobs %}
+{% if job.alive() %}
+<div class="alert alert-success" role="alert">
+{% else %}
+<div class="alert alert-warning" role="alert">
+{% endif %}
+    <div class="container">
+        <p>Job ID <a href="/jobs/{{ job.id }}" class="alert-link">#{{ job.id }}</a></p>
+        <p><small>Source: <a href="{{ job.url }}" class="alert-link">{{ job.url }} ("{{ job.title }}")</a></small></p>
+        <p><small>{{ job.nice_uptime2() }}</small></p>
+    </div>
+    {% if not job.alive() %}
+    <div class="container float-right">
+        <a class="btn btn-danger float-right" href="{{ url_for('dismiss', job_id=job.id) }}">
+            Dismiss
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
